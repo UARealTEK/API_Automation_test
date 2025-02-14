@@ -58,3 +58,4 @@ jobs:
 
       - name: Print Download Instructions
         run: echo "You can download the Allure report from the GitHub Actions artifacts."
+
