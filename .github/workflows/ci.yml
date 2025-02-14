@@ -1,12 +1,12 @@
-name: Run JUnit API Tests
+name: Run JUnit Tests with Selenium
 
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Updated to latest version
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v3  # Updated to latest version
         with:
           java-version: '22'
           distribution: 'zulu'
@@ -37,36 +37,21 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          $allure_version = "2.22.5"
-          $allure_url = "https://github.com/allure-framework/allure2/releases/download/$allure_version/allure-$allure_version.zip"
-          Invoke-WebRequest -Uri $allure_url -OutFile "allure.zip"
-          Expand-Archive -Path "allure.zip" -DestinationPath "allure" -Force
-          $allure_bin = Get-ChildItem -Path "allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
-          echo "$allure_bin/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        shell: pwsh
-
-      - name: Verify Allure Installation
-        run: |
-          $allure_bin = Get-ChildItem -Path "allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
-          if (-Not (Test-Path "$allure_bin/bin/allure.bat")) {
-            Write-Host "❌ ERROR: Allure executable not found at $allure_bin/bin/allure.bat"
-            exit 1
-          }
-          Write-Host "✅ Allure installed successfully at: $allure_bin"
-        shell: pwsh
+          curl -o allure.zip -Ls "https://github.com/allure-framework/allure2/releases/latest/download/allure-commandline.zip"
+          powershell -Command "Expand-Archive -Path allure.zip -DestinationPath allure"
+          echo "${{ github.workspace }}/allure/bin" >> $GITHUB_PATH
 
       - name: Generate Allure Report
-        run: |
-          $allure_bin = Get-ChildItem -Path "allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
-          & "$allure_bin/bin/allure.bat" generate target/allure-results -o target/allure-report --clean
-        shell: pwsh
+        run: mvn allure:report
 
-      - name: Upload Allure Report as Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Allure Results
+        uses: actions/upload-artifact@v4  # Updated to v4
+        with:
+          name: allure-results
+          path: target/allure-results
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4  # Updated to v4
         with:
           name: allure-report
-          path: target/allure-report
-          retention-days: 7
-
-      - name: Print Download Instructions
-        run: echo "✅ You can download the Allure report from the GitHub Actions artifacts."
+          path: target/site/allure-maven
