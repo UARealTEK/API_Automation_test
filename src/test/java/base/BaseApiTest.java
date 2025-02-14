@@ -1,6 +1,7 @@
 package base;
 
 import io.restassured.RestAssured;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeAll;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,6 +32,10 @@ public class BaseApiTest {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration file", e);
         }
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 
     public String getXChallengerSessionID() {

@@ -18,7 +18,7 @@ public class GETTodoTests extends BaseApiTest {
     @Test
     public void getAllTodos() {
         given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getXChallengerSessionID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
@@ -29,7 +29,7 @@ public class GETTodoTests extends BaseApiTest {
     @Test
     public void checkPluralValidation() {
         given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getXChallengerSessionID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint().substring(0,Endpoints.TODOS.getEndpoint().length()-1))
                 .then()
@@ -41,7 +41,7 @@ public class GETTodoTests extends BaseApiTest {
     public void checkSpecificTodo() {
         Integer randomID = getRandomTodoID();
         Integer receivedInt = given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getXChallengerSessionID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint() + "/" + randomID)
                 .then()
