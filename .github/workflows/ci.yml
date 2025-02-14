@@ -39,10 +39,14 @@ jobs:
         run: |
           curl -o allure.zip -Ls "https://github.com/allure-framework/allure2/releases/latest/download/allure-commandline.zip"
           powershell -Command "Expand-Archive -Path allure.zip -DestinationPath allure"
-          echo "${{ github.workspace }}/allure/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "$PWD/allure/allure-2.*/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: pwsh
 
       - name: Generate Allure Report
-        run: allure generate target/allure-results -o target/allure-report --clean
+        run: |
+          $env:PATH += ";$PWD/allure/allure-2.*/bin"
+          allure generate target/allure-results -o target/allure-report --clean
+        shell: pwsh
 
       - name: Upload Allure Report as Artifact
         uses: actions/upload-artifact@v4
