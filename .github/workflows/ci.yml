@@ -1,12 +1,12 @@
-name: Run JUnit Tests with Selenium
+name: Run JUnit API Tests
 
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   test:
