@@ -42,14 +42,14 @@ jobs:
           echo "${{ github.workspace }}/allure/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Generate Allure Report
-        run: mvn allure:report
+        run: allure generate target/allure-results -o target/allure-report --clean
 
       - name: Upload Allure Report as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: target/site/allure-maven-plugin  # The Allure report directory
-          retention-days: 7  # The report will be stored for 7 days
+          path: target/allure-report  # Fixed path
+          retention-days: 7
 
       - name: Print Download Instructions
         run: echo "You can download the Allure report from the GitHub Actions artifacts."
