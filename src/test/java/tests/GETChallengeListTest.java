@@ -1,7 +1,10 @@
 package tests;
 
 import base.BaseApiTest;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import utils.Endpoints;
 import utils.RequestHeaders;
 import utils.ResponseHeaders;
@@ -10,6 +13,8 @@ import static org.hamcrest.Matchers.*;
 
 import static io.restassured.RestAssured.given;
 
+@Tag("ChallengerTests")
+@Execution(ExecutionMode.CONCURRENT)
 public class GETChallengeListTest extends BaseApiTest {
 
     @Test
