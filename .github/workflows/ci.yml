@@ -44,8 +44,9 @@ jobs:
 
       - name: Generate Allure Report
         run: |
-          $env:PATH += ";$PWD/allure/allure-2.*/bin"
-          allure generate target/allure-results -o target/allure-report --clean
+          $allure_bin = Get-ChildItem -Path "$PWD/allure" -Directory | Select-Object -ExpandProperty FullName
+          $env:PATH += ";$allure_bin/bin"
+          & "$allure_bin/bin/allure" generate target/allure-results -o target/allure-report --clean
         shell: pwsh
 
       - name: Upload Allure Report as Artifact
