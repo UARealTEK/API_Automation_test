@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Latest version
+        uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -37,39 +37,35 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          curl -o allure.zip -Ls "https://github.com/allure-framework/allure2/releases/latest/download/allure-commandline.zip"
-          Expand-Archive -Path allure.zip -DestinationPath allure
-          echo "$PWD/allure/allure-2.*/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $allure_url = "https://github.com/allure-framework/allure2/releases/latest/download/allure-commandline.zip"
+          Invoke-WebRequest -Uri $allure_url -OutFile "allure.zip"
+          Expand-Archive -Path "allure.zip" -DestinationPath "allure" -Force
+          $allure_bin = Get-ChildItem -Path "allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
+          echo "$allure_bin/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         shell: pwsh
 
       - name: Verify Allure Installation
         run: |
-          $allurePath = Get-ChildItem -Path "$PWD/allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
-          Write-Host "✅ Allure installed at: $allurePath"
-          if (-Not $allurePath) {
-            Write-Host "❌ ERROR: Allure installation directory not found!"
+          $allure_bin = Get-ChildItem -Path "allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
+          if (-Not (Test-Path "$allure_bin/bin/allure.bat")) {
+            Write-Host "❌ ERROR: Allure executable not found at $allure_bin/bin/allure.bat"
             exit 1
           }
+          Write-Host "✅ Allure installed successfully at: $allure_bin"
         shell: pwsh
 
       - name: Generate Allure Report
         run: |
-          $allure_bin = Get-ChildItem -Path "$PWD/allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
-          $allure_exe = "$allure_bin/bin/allure.bat"
-          if (-Not (Test-Path $allure_exe)) {
-            Write-Host "❌ ERROR: Allure executable not found at $allure_exe"
-            exit 1
-          }
-          Write-Host "✅ Running Allure from $allure_exe"
-          & $allure_exe generate target/allure-results -o target/allure-report --clean
+          $allure_bin = Get-ChildItem -Path "allure" -Directory | Select-Object -ExpandProperty FullName | Select-Object -First 1
+          & "$allure_bin/bin/allure.bat" generate target/allure-results -o target/allure-report --clean
         shell: pwsh
 
       - name: Upload Allure Report as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: target/allure-report  # Ensure this is correct
-          retention-days: 7  # The report will be stored for 7 days
+          path: target/allure-report
+          retention-days: 7
 
       - name: Print Download Instructions
         run: echo "✅ You can download the Allure report from the GitHub Actions artifacts."
