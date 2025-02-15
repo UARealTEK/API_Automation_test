@@ -12,7 +12,7 @@
         <maven.compiler.source>22</maven.compiler.source>
         <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <groups>ChallengerTests, TodosTests</groups>
+        <groups>POST_tests,GET_tests,HEAD_tests</groups>
     </properties>
 
     <dependencies>

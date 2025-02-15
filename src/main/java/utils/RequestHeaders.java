@@ -1,7 +1,6 @@
 package utils;
 
 public enum RequestHeaders {
-
     X_CHALLENGER("X-CHALLENGER");
 
     private final String header;
