@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import utils.Endpoints;
 
-import static io.restassured.RestAssured.given;
 @Tag("POST_tests")
 @Execution(ExecutionMode.CONCURRENT)
 public class POSTTodoTests extends BaseApiTest {
