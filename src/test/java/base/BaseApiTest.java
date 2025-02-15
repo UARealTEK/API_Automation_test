@@ -21,8 +21,8 @@ public class BaseApiTest {
 
     @BeforeAll
     public static void setup() {
-//        loadConfig();
-        RestAssured.baseURI = "https://apichallenges.eviltester.com";
+        loadConfig();
+        RestAssured.baseURI = config.getProperty("base.url");
     }
 
     private static void loadConfig() {
