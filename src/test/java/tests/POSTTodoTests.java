@@ -2,6 +2,7 @@ package tests;
 
 import base.BaseApiTest;
 import base.BasePOSTMethods;
+import io.qameta.allure.Description;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Assertions;
@@ -17,12 +18,14 @@ public class POSTTodoTests extends BaseApiTest {
     private static final Log log = LogFactory.getLog(POSTTodoTests.class);
 
     @Test
+    @Description("Check_Post_Challenge")
     public void checkPostChallenge() {
         Assertions.assertEquals(201,
                 new BasePOSTMethods().postChallenge().extract().statusCode());
     }
 
     @Test
+    @Description("Check_Posting_TODO_Item")
     public void checkPostTodo() throws Exception {
         BasePOSTMethods post = new BasePOSTMethods();
         Assertions.assertEquals(201,

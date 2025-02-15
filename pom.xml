@@ -13,6 +13,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <groups>POST_tests,GET_tests,HEAD_tests</groups>
+        <allure.results.directory>target/allure-results</allure.results.directory>
     </properties>
 
     <dependencies>
@@ -77,17 +78,16 @@
 
     <build>
         <plugins>
-            <!-- Maven Surefire Plugin for running JUnit tests in parallel -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M7</version>
                 <configuration>
                     <parallel>methods</parallel>
                     <useUnlimitedThreads>true</useUnlimitedThreads>
                     <groups>${groups}</groups>
                     <systemPropertyVariables>
-                        <allure.results.directory>target/allure-results</allure.results.directory>
+                        <allure.results.directory>${allure.results.directory}</allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
