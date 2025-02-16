@@ -6,7 +6,6 @@ import base.BasePUTMethods;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,8 +73,9 @@ public class PUTTodoTests extends BaseApiTest {
         body.setDoneStatus(BaseGETMethods.getSpecificTodo(randomID).extract().body().jsonPath().getBoolean("todos[0].doneStatus"));
 
         Assertions.assertEquals(200,
-                put.putTodo(body)
+                put.putTodo(randomID,body)
                         .then()
+                        .log().body()
                         .extract()
                         .statusCode());
     }

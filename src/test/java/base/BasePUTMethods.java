@@ -23,13 +23,13 @@ public class BasePUTMethods extends BaseApiTest {
                 .put(Endpoints.TODOS.getEndpoint() + "/" + todoID);
     }
 
-    public Response putTodo(Body body) throws Exception {
+    public Response putTodo(Integer todoID, Body body) throws Exception {
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
                 .contentType(ContentType.JSON)
                 .body(body.toJson())
                 .when()
-                .put(Endpoints.TODOS.getEndpoint() + "/" + body.getId());
+                .put(Endpoints.TODOS.getEndpoint() + "/" + todoID);
     }
 
     public Response putRandomTodo() throws Exception {
