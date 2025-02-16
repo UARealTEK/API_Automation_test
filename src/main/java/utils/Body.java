@@ -22,6 +22,7 @@ public class Body {
     private String title;
     private Boolean doneStatus;
     private String description;
+    private String priority;
 
     public String toJson() throws Exception {
         return new ObjectMapper().writeValueAsString(this);
