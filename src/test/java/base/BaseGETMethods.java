@@ -1,5 +1,6 @@
 package base;
 
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import utils.Endpoints;
@@ -32,7 +33,7 @@ public class BaseGETMethods extends BaseApiTest {
     public static ValidatableResponse getAllTodosWithXML() {
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getXMLRequestFormat())
+                .accept(ContentType.XML)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
@@ -42,7 +43,7 @@ public class BaseGETMethods extends BaseApiTest {
     public static ValidatableResponse getAllTodosWithJSON() {
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getJSONRequestFormat())
+                .accept(ContentType.JSON)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
@@ -52,7 +53,7 @@ public class BaseGETMethods extends BaseApiTest {
     public static ValidatableResponse getAllTodosWidthDefaultAcceptType() {
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getDEFAULTRequestFormat())
+                .accept(ContentType.ANY)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
@@ -62,7 +63,7 @@ public class BaseGETMethods extends BaseApiTest {
     public static ValidatableResponse getAllTodosWidthPreferredAcceptType() {
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getXMLRequestFormat() + ", " + RequestHeaders.getJSONRequestFormat())
+                .accept(ContentType.JSON + ", " + ContentType.XML)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()

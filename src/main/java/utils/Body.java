@@ -1,15 +1,14 @@
 package utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.NoArgsConstructor;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Body {
     private Integer id;
@@ -18,8 +17,14 @@ public class Body {
     private String description;
     private String priority;
 
+    public Body() {}
+
     public String toJson() throws Exception {
         return new ObjectMapper().writeValueAsString(this);
+    }
+
+    public String toXML() throws Exception {
+        return new XmlMapper().writeValueAsString(this);
     }
 
     public static String getRandomString(int number) {

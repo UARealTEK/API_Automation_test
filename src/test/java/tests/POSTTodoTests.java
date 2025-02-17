@@ -55,10 +55,21 @@ public class POSTTodoTests extends BaseApiTest {
         BasePOSTMethods post = new BasePOSTMethods();
         String invalidTitle = Body.getRandomString(51); // just above the limit
         String validTitle = Body.getRandomString(50);
+
+        Body bodyWithInvalidTitle = new Body();
+        bodyWithInvalidTitle.setTitle(invalidTitle);
+        bodyWithInvalidTitle.setDescription(validTitle);
+        bodyWithInvalidTitle.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
+        Body bodyWithValidTitle = new Body();
+        bodyWithValidTitle.setTitle(validTitle);
+        bodyWithValidTitle.setDescription(validTitle);
+        bodyWithValidTitle.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
         Assertions.assertEquals(201,
-                post.postTodo(validTitle,true,"test").then().extract().statusCode());
+                post.postTodo(bodyWithValidTitle,ContentType.JSON,ContentType.JSON).then().extract().statusCode());
         Assertions.assertEquals(400,
-                post.postTodo(invalidTitle,true,"test").then().extract().statusCode());
+                post.postTodo(bodyWithInvalidTitle,ContentType.JSON,ContentType.JSON).then().extract().statusCode());
 
     }
 
@@ -70,10 +81,22 @@ public class POSTTodoTests extends BaseApiTest {
         BasePOSTMethods post = new BasePOSTMethods();
         String invalidDescription = Body.getRandomString(201); // just above the limit
         String validDescription = Body.getRandomString(200);
+
+        Body bodyWithInvalidDescription = new Body();
+        bodyWithInvalidDescription.setTitle(Body.getRandomString(50));
+        bodyWithInvalidDescription.setDescription(invalidDescription);
+        bodyWithInvalidDescription.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
+        Body bodyWithValidDescription = new Body();
+        bodyWithValidDescription.setTitle(Body.getRandomString(50));
+        bodyWithValidDescription.setDescription(validDescription);
+        bodyWithValidDescription.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
+
         Assertions.assertEquals(201,
-                post.postTodo("test",true,validDescription).then().extract().statusCode());
+                post.postTodo(bodyWithValidDescription,ContentType.JSON,ContentType.JSON).then().extract().statusCode());
         Assertions.assertEquals(400,
-                post.postTodo("test",true,invalidDescription).then().extract().statusCode());
+                post.postTodo(bodyWithInvalidDescription,ContentType.JSON,ContentType.JSON).then().extract().statusCode());
 
     }
 
@@ -86,8 +109,13 @@ public class POSTTodoTests extends BaseApiTest {
         String validDescription = Body.getRandomString(200); // just above the limit
         String validTitle = Body.getRandomString(50);
 
+        Body validBody = new Body();
+        validBody.setTitle(validTitle);
+        validBody.setDescription(validDescription);
+        validBody.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
         Assertions.assertEquals(201,
-                post.postTodo(validTitle,true,validDescription).then().extract().statusCode());
+                post.postTodo(validBody, ContentType.JSON, ContentType.JSON).then().extract().statusCode());
     }
 
     @Test
@@ -96,12 +124,23 @@ public class POSTTodoTests extends BaseApiTest {
     @Story("Story1")
     public void checkPostTodoWidthMaximumPayloadLength() throws Exception {
         BasePOSTMethods post = new BasePOSTMethods();
-        String invalidPayload = Body.getRandomString(5000); // just above the limit
+        String invalidPayload = Body.getRandomString(5000);
+        String validPayload = Body.getRandomString(50);
+
+        Body bodyWithInvalidTitle = new Body();
+        bodyWithInvalidTitle.setTitle(invalidPayload);
+        bodyWithInvalidTitle.setDescription(validPayload);
+        bodyWithInvalidTitle.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
+        Body bodyWithInvalidDescription = new Body();
+        bodyWithInvalidDescription.setTitle(validPayload);
+        bodyWithInvalidDescription.setDescription(invalidPayload);
+        bodyWithInvalidDescription.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
 
         Assertions.assertEquals(413,
-                post.postTodo(invalidPayload,true,"test").then().extract().statusCode());
+                post.postTodo(bodyWithInvalidTitle, ContentType.JSON, ContentType.JSON).then().extract().statusCode());
         Assertions.assertEquals(413,
-                post.postTodo("test",true,invalidPayload).then().extract().statusCode());
+                post.postTodo(bodyWithInvalidDescription,ContentType.JSON,ContentType.JSON).then().extract().statusCode());
     }
 
     @Test
@@ -181,5 +220,11 @@ public class POSTTodoTests extends BaseApiTest {
         Assertions.assertEquals(404,actualStatusCode);
     }
 
-
+//    @Test
+//    @Description("Check_POST_Width_newID")
+//    @Feature("POST_TestFeature")
+//    @Story("Story1")
+//    public void checkPostingWithXML() {
+//
+//    }
 }

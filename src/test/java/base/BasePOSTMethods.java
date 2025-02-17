@@ -23,15 +23,12 @@ public class BasePOSTMethods extends BaseApiTest{
                 .log().all();
     }
 
-    public Response postTodo(String title, Boolean doneStatus , String descriptionValue) throws Exception {
-        Body body = new Body();
-        body.setTitle(title);
-        body.setDoneStatus(doneStatus);
-        body.setDescription(descriptionValue);
+    public Response postTodo(Body body, ContentType requestType, ContentType responseType) throws Exception {
         log.info(body.toJson());
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .contentType(ContentType.JSON)
+                .accept(requestType)
+                .contentType(responseType)
                 .body(body.toJson())
                 .when()
                 .post(Endpoints.TODOS.getEndpoint());

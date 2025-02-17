@@ -6,6 +6,7 @@ import base.BasePOSTMethods;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
+import io.restassured.http.ContentType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import utils.Body;
 import utils.Endpoints;
 import utils.RequestHeaders;
 
@@ -31,8 +33,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void getAllChallengesStatus() {
-        BaseGETMethods getMethods = new BaseGETMethods();
-        Assertions.assertEquals(200,getMethods.getAllChallenges().then().extract().statusCode());
+        Assertions.assertEquals(200,getAllChallenges().then().extract().statusCode());
     }
 
     @Test
@@ -90,7 +91,12 @@ public class GETTodoTests extends BaseGETMethods {
     @Story("Story1")
     public void checkTodoWithDoneStatus() throws Exception {
         BasePOSTMethods post = new BasePOSTMethods();
-        Assertions.assertEquals(true, post.postTodo("title",true,"description")
+
+        Body body = new Body();
+        body.setTitle(Body.getRandomString(50));
+        body.setDescription(Body.getRandomString(50));
+        body.setDoneStatus(true);
+        Assertions.assertEquals(true, post.postTodo(body,ContentType.JSON,ContentType.JSON)
                 .then().extract().body().jsonPath().get("doneStatus"));
     }
 
@@ -149,7 +155,7 @@ public class GETTodoTests extends BaseGETMethods {
     public void checkAllTodoWithInvalidAcceptFormat() {
         Assertions.assertEquals(406, given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getINVALIDRequestFormat())
+                .header(RequestHeaders.ACCEPT.getRequestHeader(), ContentType.URLENC)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
