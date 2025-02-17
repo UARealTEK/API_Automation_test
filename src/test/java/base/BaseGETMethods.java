@@ -59,6 +59,16 @@ public class BaseGETMethods extends BaseApiTest {
                 .log().all();
     }
 
+    public static ValidatableResponse getAllTodosWidthPreferredAcceptType() {
+        return given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getXMLRequestFormat() + ", " + RequestHeaders.getJSONRequestFormat())
+                .when()
+                .get(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all();
+    }
+
     public static Integer getRandomTodoID() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         return getTodoIDList().isEmpty() ? null : getTodoIDList().get(random.nextInt(getTodoIDList().size()));

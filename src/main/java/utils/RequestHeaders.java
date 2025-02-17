@@ -14,6 +14,8 @@ public enum RequestHeaders {
     private static final String JSONRequestFormat = "application/json";
     @Getter
     private static final String DEFAULTRequestFormat = "*/*";
+    @Getter
+    private static final String INVALIDRequestFormat = "application/gzip";
 
 
     RequestHeaders(String header) {

@@ -1,5 +1,6 @@
 package tests;
 
+import base.BaseApiTest;
 import base.BaseGETMethods;
 import base.BasePOSTMethods;
 import io.qameta.allure.Description;
@@ -118,7 +119,7 @@ public class GETTodoTests extends BaseGETMethods {
     }
 
     @Test
-    @Description("Check_GET_AllTodo_WithDEFAULT_Format")
+    @Description("Check_GET_AllTodo_With_DEFAULT_Format")
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkAllTodoWithDefaultAcceptFormat() {
@@ -127,6 +128,33 @@ public class GETTodoTests extends BaseGETMethods {
                 .all()
                 .extract()
                 .statusCode());
+    }
+
+    @Test
+    @Description("Check_GET_AllTodo_With_PREFERRED_Format")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
+    public void checkAllTodoWithPreferredAcceptFormat() {
+        Assertions.assertEquals(200,getAllTodosWidthPreferredAcceptType()
+                .log()
+                .all()
+                .extract()
+                .statusCode());
+    }
+
+    @Test
+    @Description("Check_GET_AllTodo_With_Invalid_Accept_Format")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
+    public void checkAllTodoWithInvalidAcceptFormat() {
+        Assertions.assertEquals(406, given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getINVALIDRequestFormat())
+                .when()
+                .get(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all()
+                .extract().statusCode());
     }
 
 }
