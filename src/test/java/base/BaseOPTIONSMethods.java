@@ -14,7 +14,7 @@ public class BaseOPTIONSMethods extends BaseApiTest {
 
     public Response optionsTodo() {
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .when()
                 .options(Endpoints.TODOS.getEndpoint());
     }

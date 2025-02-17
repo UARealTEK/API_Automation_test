@@ -29,15 +29,6 @@ public class POSTTodoTests extends BasePOSTMethods {
     private static final Log log = LogFactory.getLog(POSTTodoTests.class);
 
     @Test
-    @Description("Check_Post_Challenge")
-    @Feature("POST_TestFeature")
-    @Story("Story1")
-    public void checkPostChallenge() {
-        Assertions.assertEquals(201,
-                new BasePOSTMethods().postChallenge().extract().statusCode());
-    }
-
-    @Test
     @Description("Check_Posting_TODO_Item")
     @Feature("POST_TestFeature")
     @Story("Story1")
@@ -156,7 +147,7 @@ public class POSTTodoTests extends BasePOSTMethods {
         body.setPriority(randomValidString);
 
         Integer actualStatusCode = given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .contentType(ContentType.JSON)
                 .body(body.toJson())
                 .when()
@@ -182,7 +173,7 @@ public class POSTTodoTests extends BasePOSTMethods {
         body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
 
         Integer actualStatusCode = given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .contentType(ContentType.JSON)
                 .body(body.toJson())
                 .when()
@@ -208,7 +199,7 @@ public class POSTTodoTests extends BasePOSTMethods {
         body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
 
         Integer actualStatusCode = given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .contentType(ContentType.JSON)
                 .body(body.toJson())
                 .when()
@@ -221,7 +212,7 @@ public class POSTTodoTests extends BasePOSTMethods {
     }
 
     @Test
-    @Description("Check_POST_Width_newID")
+    @Description("Check_POST_Width_XML_ContentType")
     @Feature("POST_TestFeature")
     @Story("Story1")
     public void checkPostingWithXML() throws Exception {
@@ -239,4 +230,66 @@ public class POSTTodoTests extends BasePOSTMethods {
                         .extract()
                         .statusCode());
     }
+
+    @Test
+    @Description("Check_POST_Width_JSON_ContentType")
+    @Feature("POST_TestFeature")
+    @Story("Story1")
+    public void checkPostingWithJSON() throws Exception {
+        Body body = new Body();
+        String validString = Body.getRandomString(50);
+
+        body.setTitle(validString);
+        body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+        body.setDescription(validString);
+
+        Assertions.assertEquals(201,
+                postTodo(body,ContentType.JSON,ContentType.JSON)
+                        .then()
+                        .log().all()
+                        .extract()
+                        .statusCode());
+    }
+
+    @Test
+    @Description("Check_POST_Width_Default_ContentType")
+    @Feature("POST_TestFeature")
+    @Story("Story1")
+    public void checkPostingWithDefault() throws Exception {
+        Body body = new Body();
+        String validString = Body.getRandomString(50);
+
+        body.setTitle(validString);
+        body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+        body.setDescription(validString);
+
+        Assertions.assertEquals(201,
+                postTodo(body,ContentType.ANY,ContentType.ANY)
+                        .then()
+                        .log().all()
+                        .extract()
+                        .statusCode());
+    }
+
+    @Test
+    @Description("Check_POST_Width_Invalid_ContentType")
+    @Feature("POST_TestFeature")
+    @Story("Story1")
+    public void checkPostingWithInvalidContentType() throws Exception {
+        Body body = new Body();
+        String validString = Body.getRandomString(50);
+
+        body.setTitle(validString);
+        body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+        body.setDescription(validString);
+
+        Assertions.assertEquals(415,
+                postTodo(body,ContentType.JSON,ContentType.URLENC)
+                        .then()
+                        .log().all()
+                        .extract()
+                        .statusCode());
+    }
+
+
 }

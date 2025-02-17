@@ -16,7 +16,7 @@ public class BasePUTMethods extends BaseApiTest {
         body.setDoneStatus(doneStatus);
         body.setDescription(descriptionValue);
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .contentType(ContentType.JSON)
                 .body(body.toJson())
                 .when()
@@ -25,7 +25,7 @@ public class BasePUTMethods extends BaseApiTest {
 
     public Response putTodo(Integer todoID, Body body) throws Exception {
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .contentType(ContentType.JSON)
                 .body(body.toJson())
                 .when()
@@ -35,7 +35,7 @@ public class BasePUTMethods extends BaseApiTest {
     public Response putRandomTodo() throws Exception {
         Integer randomID = BaseGETMethods.getRandomTodoID();
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .contentType(ContentType.JSON)
                 .body(Body.getRandomBody())
                 .when()

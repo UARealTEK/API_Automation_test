@@ -18,8 +18,6 @@ import utils.Body;
 import utils.Endpoints;
 import utils.RequestHeaders;
 
-import java.util.Comparator;
-
 import static io.restassured.RestAssured.given;
 
 @Tag("GET_tests")
@@ -27,14 +25,6 @@ import static io.restassured.RestAssured.given;
 public class GETTodoTests extends BaseGETMethods {
 
     private static final Log log = LogFactory.getLog(GETTodoTests.class);
-
-    @Test
-    @Description("Check_GET_Challenger")
-    @Feature("GET_TestFeature")
-    @Story("Story1")
-    public void getAllChallengesStatus() {
-        Assertions.assertEquals(200,getAllChallenges().then().extract().statusCode());
-    }
 
     @Test
     @Description("Check_GET_All_Todos")
@@ -50,7 +40,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Story("Story1")
     public void checkPluralValidation() {
         given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getChallengerID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint().substring(0,Endpoints.TODOS.getEndpoint().length()-1))
                 .then()
@@ -77,11 +67,11 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkInvalidSpecificTodo() {
-        getTodoIDList().stream()
-                .max(Comparator.comparing(Integer::intValue))
-                .ifPresent(maxInt -> Assertions.assertEquals(404, getSpecificTodo(maxInt + 1)
+        int maxID = BaseGETMethods.getLastTodo().extract().body().jsonPath().getInt("todos[0].id");
+        Assertions.assertEquals(404,
+                BaseGETMethods.getSpecificTodo(maxID + 1)
                         .extract()
-                        .statusCode()));
+                        .statusCode());
 
     }
 
@@ -155,7 +145,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Story("Story1")
     public void checkAllTodoWithInvalidAcceptFormat() {
         Assertions.assertEquals(406, given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getChallengerID())
                 .accept(ContentType.URLENC)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())

@@ -10,7 +10,7 @@ public class BaseHEADMethods extends BaseApiTest{
 
     public ValidatableResponse headAllTodos() {
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .when()
                 .head(Endpoints.TODOS.getEndpoint())
                 .then()

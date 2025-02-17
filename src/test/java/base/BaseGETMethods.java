@@ -18,7 +18,7 @@ public class BaseGETMethods extends BaseApiTest {
 
     public static Response getAllChallenges() {
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .when()
                 .get(Endpoints.CHALLENGES.getEndpoint());
     }
@@ -35,7 +35,7 @@ public class BaseGETMethods extends BaseApiTest {
         }
 
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .accept(valueToAccept)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
@@ -49,7 +49,7 @@ public class BaseGETMethods extends BaseApiTest {
                 .collect(Collectors.joining(", "));
 
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .accept(valueToAccept)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
@@ -64,7 +64,7 @@ public class BaseGETMethods extends BaseApiTest {
 
     public static List<Integer> getTodoIDList() {
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
@@ -77,7 +77,7 @@ public class BaseGETMethods extends BaseApiTest {
 
     public static ValidatableResponse getSpecificTodo(Integer toDoID) {
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint() + "/" + toDoID)
                 .then()
@@ -88,7 +88,7 @@ public class BaseGETMethods extends BaseApiTest {
     public static ValidatableResponse getLastTodo() {
         Integer toDoID = getTodoIDList().stream().max(Comparator.comparing(Integer::intValue)).orElse(null);
         return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
                 .when()
                 .get(Endpoints.TODOS.getEndpoint() + "/" + toDoID)
                 .then()

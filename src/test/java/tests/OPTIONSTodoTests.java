@@ -11,19 +11,17 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import utils.RequestHeaders;
 import utils.ResponseHeaders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Tag("OPTIONS_tests")
 @Execution(ExecutionMode.CONCURRENT)
-public class OPTiONSTodoTests extends BaseOPTIONSMethods {
+public class OPTIONSTodoTests extends BaseOPTIONSMethods {
 
-    private static final Log log = LogFactory.getLog(OPTiONSTodoTests.class);
+    private static final Log log = LogFactory.getLog(OPTIONSTodoTests.class);
 
     @Test
     @Description("Check_OPTIONS_Specific_Todo")
