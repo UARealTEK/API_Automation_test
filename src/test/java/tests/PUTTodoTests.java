@@ -58,7 +58,7 @@ public class PUTTodoTests extends BaseApiTest {
 
     @Test
     @Description("Check_PUT_Width_Partial_Data")
-    @Feature("POST_TestFeature")
+    @Feature("PUT_TestFeature")
     @Story("Story1")
     public void checkTodoUpdateWithPartialData() throws Exception {
         BasePUTMethods put = new BasePUTMethods();
@@ -76,6 +76,55 @@ public class PUTTodoTests extends BaseApiTest {
                 put.putTodo(randomID,body)
                         .then()
                         .log().body()
+                        .extract()
+                        .statusCode());
+    }
+
+    @Test
+    @Description("Check_PUT_Widthout_title")
+    @Feature("PUT_TestFeature")
+    @Story("Story1")
+    public void checkTodoUpdateWithoutTitle() throws Exception {
+        BasePUTMethods put = new BasePUTMethods();
+        Integer randomID = BaseGETMethods.getRandomTodoID();
+        String randomValidString = Body.getRandomString(50);
+
+        Body body = new Body();
+        body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+        body.setDescription(randomValidString);
+
+        Assertions.assertEquals(400,put.putTodo(randomID,body).then().log().all().extract().statusCode());
+    }
+
+    @Test
+    @Description("Check_PUT_Without_title")
+    @Feature("PUT_TestFeature")
+    @Story("Story1")
+    public void checkTodoUpdateWithDifferentID() throws Exception {
+        BasePUTMethods put = new BasePUTMethods();
+        Integer randomID = BaseGETMethods.getRandomTodoID();
+        Integer anotherRandomID;
+        String randomValidString = Body.getRandomString(50);
+
+        if (randomID != null &&randomID == 1) {
+            anotherRandomID = 2;
+        } else if (randomID != null &&randomID == BaseGETMethods.getLastTodo().extract().body().jsonPath().getInt("todos[0].id")) {
+            anotherRandomID = BaseGETMethods.getLastTodo().extract().body().jsonPath().getInt("todos[0].id") - 1;
+        } else {
+            anotherRandomID = BaseGETMethods.getRandomTodoID();
+        }
+
+        Body body = new Body();
+        body.setId(anotherRandomID);
+        body.setTitle(randomValidString);
+        body.setDescription(randomValidString);
+        body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+
+        Assertions.assertEquals(400,
+                put.putTodo(randomID,body)
+                        .then()
+                        .log()
+                        .all()
                         .extract()
                         .statusCode());
     }
