@@ -4,9 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum RequestHeaders {
-    X_CHALLENGER("X-CHALLENGER"),
-    ACCEPT("Accept"),
-    CONTENT_TYPE("Content-Type");
+    X_CHALLENGER("X-CHALLENGER");
 
     private final String header;
 

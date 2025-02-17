@@ -156,7 +156,7 @@ public class GETTodoTests extends BaseGETMethods {
     public void checkAllTodoWithInvalidAcceptFormat() {
         Assertions.assertEquals(406, given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .header(RequestHeaders.ACCEPT.getRequestHeader(), ContentType.URLENC)
+                .accept(ContentType.URLENC)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
