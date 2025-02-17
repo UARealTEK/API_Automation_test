@@ -24,7 +24,7 @@ import static io.restassured.RestAssured.given;
 
 @Tag("POST_tests")
 @Execution(ExecutionMode.CONCURRENT)
-public class POSTTodoTests extends BaseApiTest {
+public class POSTTodoTests extends BasePOSTMethods {
 
     private static final Log log = LogFactory.getLog(POSTTodoTests.class);
 
@@ -220,11 +220,23 @@ public class POSTTodoTests extends BaseApiTest {
         Assertions.assertEquals(404,actualStatusCode);
     }
 
-//    @Test
-//    @Description("Check_POST_Width_newID")
-//    @Feature("POST_TestFeature")
-//    @Story("Story1")
-//    public void checkPostingWithXML() {
-//
-//    }
+    @Test
+    @Description("Check_POST_Width_newID")
+    @Feature("POST_TestFeature")
+    @Story("Story1")
+    public void checkPostingWithXML() throws Exception {
+        Body body = new Body();
+        String validString = Body.getRandomString(50);
+
+        body.setTitle(validString);
+        body.setDoneStatus(ThreadLocalRandom.current().nextBoolean());
+        body.setDescription(validString);
+
+        Assertions.assertEquals(201,
+                postTodo(body,ContentType.XML,ContentType.XML)
+                        .then()
+                        .log().all()
+                        .extract()
+                        .statusCode());
+    }
 }

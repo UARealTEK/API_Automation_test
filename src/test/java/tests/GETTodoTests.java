@@ -96,6 +96,7 @@ public class GETTodoTests extends BaseGETMethods {
         body.setTitle(Body.getRandomString(50));
         body.setDescription(Body.getRandomString(50));
         body.setDoneStatus(true);
+
         Assertions.assertEquals(true, post.postTodo(body,ContentType.JSON,ContentType.JSON)
                 .then().extract().body().jsonPath().get("doneStatus"));
     }
@@ -105,7 +106,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkAllTodoWithXML() {
-        Assertions.assertEquals(200,getAllTodosWithXML()
+        Assertions.assertEquals(200,getAllTodos(ContentType.XML)
                 .log()
                 .all()
                 .extract()
@@ -117,7 +118,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkAllTodoWithJSON() {
-        Assertions.assertEquals(200,getAllTodosWithJSON()
+        Assertions.assertEquals(200,getAllTodos(ContentType.JSON)
                 .log()
                 .all()
                 .extract()
@@ -129,7 +130,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkAllTodoWithDefaultAcceptFormat() {
-        Assertions.assertEquals(200,getAllTodosWidthDefaultAcceptType()
+        Assertions.assertEquals(200,getAllTodos(ContentType.ANY)
                 .log()
                 .all()
                 .extract()
@@ -141,7 +142,7 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkAllTodoWithPreferredAcceptFormat() {
-        Assertions.assertEquals(200,getAllTodosWidthPreferredAcceptType()
+        Assertions.assertEquals(200,getAllTodos(ContentType.JSON,ContentType.XML)
                 .log()
                 .all()
                 .extract()

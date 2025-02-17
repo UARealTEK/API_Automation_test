@@ -24,12 +24,17 @@ public class BasePOSTMethods extends BaseApiTest{
     }
 
     public Response postTodo(Body body, ContentType requestType, ContentType responseType) throws Exception {
-        log.info(body.toJson());
+        String passedInBody;
+        if (requestType == ContentType.XML) {
+            passedInBody = body.toXML();
+        } else passedInBody = body.toJson();
+
+        log.info(passedInBody);
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
                 .accept(requestType)
                 .contentType(responseType)
-                .body(body.toJson())
+                .body(passedInBody)
                 .when()
                 .post(Endpoints.TODOS.getEndpoint());
     }

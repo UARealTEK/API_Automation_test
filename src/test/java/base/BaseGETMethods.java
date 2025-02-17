@@ -6,9 +6,11 @@ import io.restassured.response.ValidatableResponse;
 import utils.Endpoints;
 import utils.RequestHeaders;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
@@ -21,49 +23,34 @@ public class BaseGETMethods extends BaseApiTest {
                 .get(Endpoints.CHALLENGES.getEndpoint());
     }
 
-    public static ValidatableResponse getAllTodos() {
+    public static ValidatableResponse getAllTodos(ContentType acceptType) {
+        ContentType valueToAccept;
+
+        if (acceptType == ContentType.JSON) {
+            valueToAccept = ContentType.JSON;
+        } else if (acceptType == ContentType.XML) {
+            valueToAccept = ContentType.XML;
+        } else {
+            valueToAccept = ContentType.ANY;
+        }
+
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .accept(valueToAccept)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
                 .log().all();
     }
 
-    public static ValidatableResponse getAllTodosWithXML() {
-        return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .accept(ContentType.XML)
-                .when()
-                .get(Endpoints.TODOS.getEndpoint())
-                .then()
-                .log().all();
-    }
+    public static ValidatableResponse getAllTodos(ContentType... acceptType) {
+        String valueToAccept = Arrays.stream(acceptType)
+                .map(ContentType::toString)
+                .collect(Collectors.joining(", "));
 
-    public static ValidatableResponse getAllTodosWithJSON() {
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .accept(ContentType.JSON)
-                .when()
-                .get(Endpoints.TODOS.getEndpoint())
-                .then()
-                .log().all();
-    }
-
-    public static ValidatableResponse getAllTodosWidthDefaultAcceptType() {
-        return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .accept(ContentType.ANY)
-                .when()
-                .get(Endpoints.TODOS.getEndpoint())
-                .then()
-                .log().all();
-    }
-
-    public static ValidatableResponse getAllTodosWidthPreferredAcceptType() {
-        return given()
-                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
-                .accept(ContentType.JSON + ", " + ContentType.XML)
+                .accept(valueToAccept)
                 .when()
                 .get(Endpoints.TODOS.getEndpoint())
                 .then()
