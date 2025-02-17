@@ -2,6 +2,9 @@ package tests;
 
 import base.BaseGETMethods;
 import base.BasePOSTMethods;
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Assertions;
@@ -23,17 +26,26 @@ public class GETTodoTests extends BaseGETMethods {
     private static final Log log = LogFactory.getLog(GETTodoTests.class);
 
     @Test
+    @Description("Check_GET_Challenger")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
     public void getAllChallengesStatus() {
         BaseGETMethods getMethods = new BaseGETMethods();
         Assertions.assertEquals(200,getMethods.getAllChallenges().then().extract().statusCode());
     }
 
     @Test
+    @Description("Check_GET_All_Todos")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
     public void getAllTodosList() {
         Assertions.assertEquals(200,getAllTodos().extract().statusCode());
     }
 
     @Test
+    @Description("Check_GET_Validate_plural")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
     public void checkPluralValidation() {
         given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), getXChallengerSessionID())
@@ -45,6 +57,9 @@ public class GETTodoTests extends BaseGETMethods {
     }
 
     @Test
+    @Description("Check_GET_Specific_Todo")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
     public void checkSpecificTodo() {
         Integer randomID = getRandomTodoID();
         Integer receivedInt = getSpecificTodo(randomID).extract()
@@ -56,6 +71,9 @@ public class GETTodoTests extends BaseGETMethods {
     }
 
     @Test
+    @Description("Check_GET_Invalid_Todo")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
     public void checkInvalidSpecificTodo() {
         getTodoIDList().stream()
                 .max(Comparator.comparing(Integer::intValue))
@@ -66,9 +84,49 @@ public class GETTodoTests extends BaseGETMethods {
     }
 
     @Test
+    @Description("Check_GET_Todo_Done")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
     public void checkTodoWithDoneStatus() throws Exception {
         BasePOSTMethods post = new BasePOSTMethods();
         Assertions.assertEquals(true, post.postTodo("title",true,"description")
                 .then().extract().body().jsonPath().get("doneStatus"));
     }
+
+    @Test
+    @Description("Check_GET_AllTodo_WithXML")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
+    public void checkAllTodoWithXML() {
+        Assertions.assertEquals(200,getAllTodosWithXML()
+                .log()
+                .all()
+                .extract()
+                .statusCode());
+    }
+
+    @Test
+    @Description("Check_GET_AllTodo_WithJSON")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
+    public void checkAllTodoWithJSON() {
+        Assertions.assertEquals(200,getAllTodosWithJSON()
+                .log()
+                .all()
+                .extract()
+                .statusCode());
+    }
+
+    @Test
+    @Description("Check_GET_AllTodo_WithDEFAULT_Format")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
+    public void checkAllTodoWithDefaultAcceptFormat() {
+        Assertions.assertEquals(200,getAllTodosWidthDefaultAcceptType()
+                .log()
+                .all()
+                .extract()
+                .statusCode());
+    }
+
 }

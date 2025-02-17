@@ -29,6 +29,36 @@ public class BaseGETMethods extends BaseApiTest {
                 .log().all();
     }
 
+    public static ValidatableResponse getAllTodosWithXML() {
+        return given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getXMLRequestFormat())
+                .when()
+                .get(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all();
+    }
+
+    public static ValidatableResponse getAllTodosWithJSON() {
+        return given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getJSONRequestFormat())
+                .when()
+                .get(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all();
+    }
+
+    public static ValidatableResponse getAllTodosWidthDefaultAcceptType() {
+        return given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), new BaseApiTest().getXChallengerSessionID())
+                .header(RequestHeaders.ACCEPT.getRequestHeader(), RequestHeaders.getDEFAULTRequestFormat())
+                .when()
+                .get(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all();
+    }
+
     public static Integer getRandomTodoID() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         return getTodoIDList().isEmpty() ? null : getTodoIDList().get(random.nextInt(getTodoIDList().size()));
