@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 @Data
@@ -65,5 +66,4 @@ public class Body {
         body.setDoneStatus(random.nextBoolean()); // Generate a random boolean
         return body.toJson();
     }
-
 }

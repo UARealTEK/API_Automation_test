@@ -3,6 +3,8 @@ package tests;
 import base.BaseApiTest;
 import base.BaseGETMethods;
 import base.BasePOSTMethods;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -18,6 +20,8 @@ import utils.Body;
 import utils.Endpoints;
 import utils.RequestHeaders;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.given;
@@ -135,7 +139,7 @@ public class POSTTodoTests extends BasePOSTMethods {
     }
 
     @Test
-    @Description("Check_Posting_TODO_Item_With_MaxPayloadLength")
+    @Description("Check_Posting_TODO_Item_With_InvalidField")
     @Feature("POST_TestFeature")
     @Story("Story1")
     public void checkPostTodoWithInvalidField() throws Exception {
@@ -289,6 +293,34 @@ public class POSTTodoTests extends BasePOSTMethods {
                         .log().all()
                         .extract()
                         .statusCode());
+    }
+
+    @Test
+    @Description("Check_POST_Width_Invalid_DoneStatus")
+    @Feature("POST_TestFeature")
+    @Story("Story1")
+    public void checkPOSTTodoWithInvalidDoneStatus() throws JsonProcessingException {
+        final String title = Body.getRandomString(50);
+        final String description = Body.getRandomString(50);
+        final String doneStatus = Body.getRandomString(50);
+
+        Map<String,String> body = new HashMap<>();
+        body.put("title",title);
+        body.put("doneStatus",doneStatus);
+        body.put("description",description);
+
+        final String bodyToPass = new ObjectMapper().writeValueAsString(body);
+
+        given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body(bodyToPass)
+                .when()
+                .post(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all()
+                .statusCode(400);
     }
 
 

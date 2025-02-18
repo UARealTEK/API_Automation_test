@@ -80,15 +80,14 @@ public class GETTodoTests extends BaseGETMethods {
     @Feature("GET_TestFeature")
     @Story("Story1")
     public void checkTodoWithDoneStatus() throws Exception {
-        BasePOSTMethods post = new BasePOSTMethods();
-
-        Body body = new Body();
-        body.setTitle(Body.getRandomString(50));
-        body.setDescription(Body.getRandomString(50));
-        body.setDoneStatus(true);
-
-        Assertions.assertEquals(true, post.postTodo(body,ContentType.JSON,ContentType.JSON)
-                .then().extract().body().jsonPath().get("doneStatus"));
+        given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), BaseApiTest.getChallengerID())
+                .queryParam("doneStatus",true)
+                .when()
+                .get(Endpoints.TODOS.getEndpoint())
+                .then()
+                .log().all()
+                .statusCode(200);
     }
 
     @Test
