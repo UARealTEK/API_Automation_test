@@ -16,4 +16,12 @@ public class BaseChallengerMethods extends BaseApiTest {
                 .when()
                 .get(Endpoints.CHALLENGER.getEndpoint() + "/" + sessionID);
     }
+
+    public Response putChallenger() {
+        String sessionID = BaseApiTest.getChallengerID();
+        return given()
+                .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), sessionID)
+                .when()
+                .get(Endpoints.CHALLENGER.getEndpoint() + "/" + sessionID);
+    }
 }

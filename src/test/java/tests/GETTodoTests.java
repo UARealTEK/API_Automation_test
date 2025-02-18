@@ -2,7 +2,6 @@ package tests;
 
 import base.BaseApiTest;
 import base.BaseGETMethods;
-import base.BasePOSTMethods;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import utils.Body;
 import utils.Endpoints;
 import utils.RequestHeaders;
 
