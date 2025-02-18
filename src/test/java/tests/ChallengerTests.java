@@ -1,6 +1,7 @@
 package tests;
 
 import base.BaseChallengerMethods;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -31,6 +32,19 @@ public class ChallengerTests extends BaseChallengerMethods {
     public void getChallengerGuid() {
         Assertions.assertEquals(200,
                 getChallenger()
+                        .then()
+                        .log().all()
+                        .extract()
+                        .statusCode());
+    }
+
+    @Test
+    @Description("Check_GET_Challenger")
+    @Feature("GET_TestFeature")
+    @Story("Story1")
+    public void restoreChallengerTest() throws JsonProcessingException {
+        Assertions.assertEquals(200,
+                restoreChallenger()
                         .then()
                         .log().all()
                         .extract()

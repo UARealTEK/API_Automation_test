@@ -1,7 +1,9 @@
 package base;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
+import utils.ChallengerBody;
 import utils.Endpoints;
 import utils.RequestHeaders;
 
@@ -17,11 +19,14 @@ public class BaseChallengerMethods extends BaseApiTest {
                 .get(Endpoints.CHALLENGER.getEndpoint() + "/" + sessionID);
     }
 
-    public Response putChallenger() {
+    public Response restoreChallenger() throws JsonProcessingException {
         String sessionID = BaseApiTest.getChallengerID();
+        ChallengerBody body = new ChallengerBody();
+        String fullBody = body.createFullChallengerJSONBody();
         return given()
                 .header(RequestHeaders.X_CHALLENGER.getRequestHeader(), sessionID)
+                .body(fullBody)
                 .when()
-                .get(Endpoints.CHALLENGER.getEndpoint() + "/" + sessionID);
+                .put(Endpoints.CHALLENGER.getEndpoint() + "/" + sessionID);
     }
 }
