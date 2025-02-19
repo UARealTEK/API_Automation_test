@@ -17,7 +17,7 @@ public class BaseApiTest {
     private static final Log log = LogFactory.getLog(BaseApiTest.class);
     protected static Properties config;
     @Getter
-    private static String challengerID = "6eb3d294-a034-43f6-81da-69f0f7e12af9";
+    private static String challengerID;
 
     @BeforeAll
     public static void setup() {
